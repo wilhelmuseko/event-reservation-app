@@ -1,15 +1,16 @@
-const Sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/postgres');
 
 const location = db.define(
   'location',
   {
     id: {
-      type: Sequelize.UUIDV4,
+      type: DataTypes.UUIDV4,
       primaryKey: true,
+      defaultValue: Sequelize.UUIDV4,
     },
-    name: Sequelize.STRING,
-    address: Sequelize.STRING,
+    name: DataTypes.STRING,
+    address: DataTypes.STRING,
   },
   {
     freezeTableName: true,

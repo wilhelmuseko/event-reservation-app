@@ -1,10 +1,8 @@
 const express = require('express');
-const services = require('../services/index');
 const router = express.Router();
+const controller = require('../controller/index');
 
-router.get('/', async (req, res) => {
-  const data = await services.location.getAll();
-  res.json(data);
-});
-
+router.get('/', controller.location.getAll);
+router.get('/:id', controller.location.getById);
+router.post('/create', controller.location.save);
 module.exports = router;
