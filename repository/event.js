@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/postgres');
+const eventTicket = require('./event_ticket');
 const event = db.define(
   'event',
   {
@@ -11,7 +12,6 @@ const event = db.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     start_date: {
       type: DataTypes.DATE,
@@ -31,5 +31,12 @@ const event = db.define(
     timestamps: false,
   }
 );
+
+event.hasMany(eventTicket, {
+  foreignKey: 'event_id',
+});
+eventTicket.belongsTo(event, {
+  foreignKey: 'event_id',
+});
 
 module.exports = event;

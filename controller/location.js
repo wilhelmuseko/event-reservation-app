@@ -24,13 +24,15 @@ locationController.getById = async (req, res, next) => {
 locationController.save = async (req, res, next) => {
   try {
     const newLocation = await services.location.save(req.body);
-    res.json(
-      successResponse(
-        'Location data saved to database.',
-        { data: newLocation },
-        201
-      )
-    );
+    res
+      .status(201)
+      .json(
+        successResponse(
+          'Location data saved to database.',
+          { data: newLocation },
+          201
+        )
+      );
   } catch (error) {
     next(error);
   }

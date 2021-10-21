@@ -4,7 +4,7 @@ const locationService = {};
 
 locationService.getAll = async () => {
   try {
-    return await repository.locationg.findAll();
+    return await repository.location.findAll();
   } catch (error) {
     throw new InternalServerError(error.message);
   }

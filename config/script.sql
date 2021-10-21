@@ -11,7 +11,7 @@ create table "location"(
 
 create table "event"(
 	id uuid primary key default uuid_generate_v4(),
-	"name" text not null unique,
+	"name" text not null,
 	start_date timestamp not null,
 	end_date timestamp not NULL,
 	location_id uuid NOT NULL REFERENCES "location"
@@ -19,7 +19,7 @@ create table "event"(
 
 create table event_ticket(
 	id uuid primary key default uuid_generate_v4(),
-	event_id uuid unique references "event",
+	event_id uuid NOT null references "event",
 	"type" text not null unique,
 	quota int4 not null,
 	price int8 not null

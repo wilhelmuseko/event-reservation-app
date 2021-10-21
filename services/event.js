@@ -4,7 +4,10 @@ const eventService = {};
 
 eventService.getAll = async () => {
   try {
-    return await repository.event.findAll();
+    return await repository.event.findAll({
+      include: [repository.location, repository.eventTicket],
+      attributes: ['id', 'name', 'start_date', 'end_date'],
+    });
   } catch (error) {
     throw new InternalServerError(error.message);
   }
@@ -18,16 +21,18 @@ eventService.getEventById = async (id) => {
   }
 };
 
-// eventService.save = async (body) => {
-//   try {
-//     const newLocation = await repository.location.create({
-//       name: body.name,
-//       address: body.address,
-//     });
-//     return newLocation;
-//   } catch (error) {
-//     throw new InternalServerError(error.message);
-//   }
-// };
+eventService.save = async (body) => {
+  try {
+    const newEvent = await repository.event.create({
+      name: body.name,
+      start_date: body.start_date,
+      end_date: body.end_date,
+      location_id: body.location_id,
+    });
+    return newEvent;
+  } catch (error) {
+    throw new InternalServerError(error.message);
+  }
+};
 
 module.exports = eventService;
