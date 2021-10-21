@@ -31,6 +31,10 @@ class NotFoundError extends BaseError {
   }
 }
 
+class ValidationError extends BaseError {
+  constructor() {}
+}
+
 module.exports = {
   InternalServerError,
   NotFoundError,

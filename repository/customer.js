@@ -1,16 +1,27 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/postgres');
-const event = require('./event');
-
-const location = db.define(
-  'location',
+const ticketPurchase = require('./ticket_purchase');
+const customer = db.define(
+  'customer',
   {
     id: {
       type: DataTypes.UUIDV4,
       primaryKey: true,
       defaultValue: Sequelize.UUIDV4,
     },
-    building_name: {
+    first_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    date_of_birth: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    phone_number: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -41,11 +52,10 @@ const location = db.define(
   }
 );
 
-location.hasMany(event, {
-  foreignKey: 'location_id',
+customer.hasMany(ticketPurchase, {
+  foreignKey: 'customer_id',
 });
-event.belongsTo(location, {
-  foreignKey: 'location_id',
+ticketPurchase.belongsTo(customer, {
+  foreignKey: 'customer_id',
 });
-
-module.exports = location;
+module.exports = customer;

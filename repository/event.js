@@ -13,6 +13,10 @@ const event = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     start_date: {
       type: DataTypes.DATE,
       allowNull: false,

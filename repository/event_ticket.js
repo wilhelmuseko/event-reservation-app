@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/postgres');
+const ticketPurchaseDetail = require('./ticket_purchase_detail');
 const eventTicket = db.define(
   'event_ticket',
   {
@@ -10,12 +11,14 @@ const eventTicket = db.define(
     },
     event_id: {
       type: DataTypes.UUIDV4,
-      allowNull: false,
+      allowNull: true,
     },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        msg: 'Type must be unique',
+      },
     },
     quota: {
       type: DataTypes.INTEGER,
@@ -31,5 +34,12 @@ const eventTicket = db.define(
     timestamps: false,
   }
 );
+
+eventTicket.hasMany(ticketPurchaseDetail, {
+  foreignKey: 'event_ticket_id',
+});
+ticketPurchaseDetail.belongsTo(eventTicket, {
+  foreignKey: 'event_ticket_id',
+});
 
 module.exports = eventTicket;

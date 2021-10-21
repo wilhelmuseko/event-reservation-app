@@ -20,10 +20,7 @@ locationService.getLocationById = async (id) => {
 
 locationService.save = async (body) => {
   try {
-    const newLocation = await repository.location.create({
-      name: body.name,
-      address: body.address,
-    });
+    const newLocation = await repository.location.create(body);
     return newLocation;
   } catch (error) {
     throw new InternalServerError(error.message);

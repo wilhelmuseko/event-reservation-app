@@ -23,12 +23,7 @@ eventService.getEventById = async (id) => {
 
 eventService.save = async (body) => {
   try {
-    const newEvent = await repository.event.create({
-      name: body.name,
-      start_date: body.start_date,
-      end_date: body.end_date,
-      location_id: body.location_id,
-    });
+    const newEvent = await repository.event.create(body);
     return newEvent;
   } catch (error) {
     throw new InternalServerError(error.message);
