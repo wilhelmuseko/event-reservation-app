@@ -3,36 +3,26 @@ create database event_reservation_database;
 \c event_reservation_database;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-create table "event"(
-	id uuid primary key default uuid_generate_v4(),
-	"name" text not null unique,
-	start_date timestamp not null,
-	end_date timestamp not null
-);
-
 create table "location"(
 	id uuid primary key default uuid_generate_v4(),
 	"name" text not null,
 	address text not null
 );
 
-create table event_location(
+create table "event"(
 	id uuid primary key default uuid_generate_v4(),
-	event_id uuid not null unique references "event",
-	location_id uuid not null references "location"
+	"name" text not null unique,
+	start_date timestamp not null,
+	end_date timestamp not NULL,
+	location_id uuid NOT NULL REFERENCES "location"
 );
 
-create table ticket_type(
+create table event_ticket(
 	id uuid primary key default uuid_generate_v4(),
+	event_id uuid unique references "event",
 	"type" text not null unique,
 	quota int4 not null,
 	price int8 not null
-);
-
-create table event_ticket_type(
-	id uuid primary key default uuid_generate_v4(),
-	event_id uuid unique references "event",
-	ticket_type_id uuid unique references "ticket_type"
 );
 
 create table customer(
@@ -51,6 +41,6 @@ create table ticket_purchase(
 create table ticket_purchase_detail(
 	id uuid primary key default uuid_generate_v4(),
 	ticket_purchase_id uuid not null references ticket_purchase,
-	event_ticket_type_id uuid not null references event_ticket_type,
+	event_ticket uuid not null references event_ticket,
 	quantity int4
 );

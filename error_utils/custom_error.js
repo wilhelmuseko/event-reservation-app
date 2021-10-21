@@ -34,4 +34,5 @@ class NotFoundError extends BaseError {
 module.exports = {
   InternalServerError,
   NotFoundError,
+  errorCodes,
 };

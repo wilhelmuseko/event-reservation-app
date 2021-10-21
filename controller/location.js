@@ -1,13 +1,11 @@
 const services = require('../services/index');
+const { successResponse } = require('../response_api');
 const locationController = {};
 
 locationController.getAll = async (req, res, next) => {
   try {
     const data = await services.location.getAll();
-    res.status(200).json({
-      message: 'Location list',
-      data,
-    });
+    res.json(successResponse('Location list', { data: data }, 200));
   } catch (error) {
     next(error);
   }
@@ -17,7 +15,7 @@ locationController.getById = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = await services.location.getLocationById(id);
-    res.json(data);
+    res.json(successResponse('Location data', { data: data }, 200));
   } catch (error) {
     next(error);
   }
@@ -26,7 +24,13 @@ locationController.getById = async (req, res, next) => {
 locationController.save = async (req, res, next) => {
   try {
     const newLocation = await services.location.save(req.body);
-    return res.status(201).json(newLocation);
+    res.json(
+      successResponse(
+        'Location data saved to database.',
+        { data: newLocation },
+        201
+      )
+    );
   } catch (error) {
     next(error);
   }

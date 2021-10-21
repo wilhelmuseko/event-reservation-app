@@ -1,9 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/postgres');
-const event = require('./event');
-
-const location = db.define(
-  'location',
+const event = db.define(
+  'event',
   {
     id: {
       type: DataTypes.UUIDV4,
@@ -13,9 +11,18 @@ const location = db.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
-    address: {
-      type: DataTypes.STRING,
+    start_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    end_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    location_id: {
+      type: DataTypes.UUIDV4,
       allowNull: false,
     },
   },
@@ -25,11 +32,4 @@ const location = db.define(
   }
 );
 
-location.hasMany(event, {
-  foreignKey: 'location_id',
-});
-event.belongsTo(location, {
-  foreignKey: 'location_id',
-});
-
-module.exports = location;
+module.exports = event;

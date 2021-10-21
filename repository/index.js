@@ -1,5 +1,7 @@
 const location = require('./location');
-const model = {};
+const event = require('./event');
+const repository = {};
 
-model.location = location;
-module.exports = model;
+repository.location = location;
+repository.event = event;
+module.exports = repository;
