@@ -27,7 +27,8 @@ create table event_ticket(
 	event_id uuid NOT null references "event",
 	"type" text not null unique,
 	quota int4 not null,
-	price int8 not null
+	price int8 not NULL,
+	unique(event_id, "type")
 );
 
 create table customer(
@@ -53,5 +54,5 @@ create table ticket_purchase_detail(
 	id uuid primary key default uuid_generate_v4(),
 	ticket_purchase_id uuid not null references ticket_purchase,
 	event_ticket_id uuid not null references event_ticket,
-	quantity int4
+	quantity int4 NOT null
 );

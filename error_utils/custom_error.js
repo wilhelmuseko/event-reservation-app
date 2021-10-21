@@ -7,6 +7,10 @@ const errorCodes = {
     code: 'INTERNAL_SERVER_ERROR',
     message: 'Internal server error. Detail: ',
   },
+  VALIDATION_ERROR: {
+    code: 'VALIDATION_ERROR',
+    message: '',
+  },
 };
 
 class BaseError extends Error {
@@ -32,11 +36,16 @@ class NotFoundError extends BaseError {
 }
 
 class ValidationError extends BaseError {
-  constructor() {}
+  constructor(message) {
+    const error = errorCodes.VALIDATION_ERROR;
+    error.message = message;
+    super(error, 400);
+  }
 }
 
 module.exports = {
   InternalServerError,
   NotFoundError,
   errorCodes,
+  ValidationError,
 };

@@ -11,7 +11,7 @@ const eventTicket = db.define(
     },
     event_id: {
       type: DataTypes.UUIDV4,
-      allowNull: true,
+      allowNull: false,
     },
     type: {
       type: DataTypes.STRING,
