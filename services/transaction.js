@@ -53,7 +53,6 @@ transactionService.getAll = async () => {
 
 transactionService.save = async (body) => {
   try {
-    console.log(body);
     const customerData = body.customer;
     let customer = await repository.customer.findOne({
       where: {

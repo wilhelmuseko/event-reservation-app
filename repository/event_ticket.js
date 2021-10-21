@@ -16,9 +16,6 @@ const eventTicket = db.define(
     type: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: {
-        msg: 'Type must be unique',
-      },
     },
     quota: {
       type: DataTypes.INTEGER,

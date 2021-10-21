@@ -24,7 +24,11 @@ eventService.getEventById = async (id) => {
 eventService.save = async (body) => {
   try {
     const newEvent = await repository.event.create(body);
-    return newEvent;
+
+    const result = await repository.event.findByPk(newEvent.id, {
+      include: [repository.location, repository.eventTicket],
+    });
+    return result;
   } catch (error) {
     throw new InternalServerError(error.message);
   }

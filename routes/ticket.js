@@ -12,16 +12,15 @@ const repository = require('../repository/index');
 
 router.post(
   '/create',
-  requiredValidation('event_id'),
-  requiredValidation('type'),
-  requiredValidation('quota'),
-  requiredValidation('price'),
-  idExistsValidation('event_id', repository.event),
-  lengthValidation('type', 1, 16),
-  body('type')
+  requiredValidation('*.event_id'),
+  requiredValidation('*.type'),
+  requiredValidation('*.quota'),
+  requiredValidation('*.price'),
+  idExistsValidation('*.event_id', repository.event),
+  lengthValidation('*.type', 1, 16),
+  body('*.type')
     .if((value, { req }) => value && req.body.event_id)
     .custom((value, { req }) => {
-      console.log(value, req.body.event_id);
       return repository.eventTicket
         .findOne({
           where: {
@@ -37,8 +36,8 @@ router.post(
           }
         });
     }),
-  numberMinValueValidation('quota', 1),
-  numberMinValueValidation('price', 0),
+  numberMinValueValidation('*.quota', 1),
+  numberMinValueValidation('*.price', 0),
   controller.eventTicket.save
 );
 module.exports = router;

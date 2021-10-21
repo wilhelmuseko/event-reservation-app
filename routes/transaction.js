@@ -52,14 +52,27 @@ router.post(
           }
         });
     }),
+  body('event.id')
+    .if(body('event.id').exists())
+    .custom(async (value, { req }) => {
+      const event = await repository.event.findByPk(value);
+      if (!event) return true;
+      if (new Date(event.end_date) < new Date()) {
+        return Promise.reject(
+          'Event period has been ended. Cannot book this event anymore'
+        );
+      }
+    }),
   body('event.tickets').custom(async (value, { req }) => {
     for (var ticket of value) {
       const eventTicketData = await repository.eventTicket.findByPk(ticket.id);
-      const total = await repository.ticketPurchaseDetail.sum('quantity', {
-        where: {
-          event_ticket_id: ticket.id,
-        },
-      });
+      const total =
+        (await repository.ticketPurchaseDetail.sum('quantity', {
+          where: {
+            event_ticket_id: ticket.id,
+          },
+        })) || 0;
+
       if (total + ticket.quantity > eventTicketData.quota) {
         return Promise.reject(
           `Ticket quota for ${

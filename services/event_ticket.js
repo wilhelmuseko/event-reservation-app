@@ -4,8 +4,19 @@ const eventTicketService = {};
 
 eventTicketService.save = async (body) => {
   try {
-    const newEventTicket = await repository.eventTicket.create(body);
-    return newEventTicket;
+    let result = [];
+    for (var ticket of body) {
+      const newEventTicket = await repository.eventTicket.create(ticket);
+      const eventTicket = await repository.eventTicket.findByPk(
+        newEventTicket.id,
+        {
+          include: repository.event,
+        }
+      );
+      result.push(eventTicket);
+    }
+
+    return result;
   } catch (error) {
     throw new InternalServerError(error.message);
   }
