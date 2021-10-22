@@ -1,18 +1,12 @@
 const express = require('express');
 const app = express();
-const locationRoutes = require('./routes/location');
-const eventRoutes = require('./routes/event');
-const transactionRoutes = require('./routes/transaction');
 const { NotFoundError } = require('./error_utils/custom_error');
 const { errorResponse } = require('./response_api');
+const apiRoutes = require('./api');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-app.use('/location', locationRoutes);
-app.use('/event', eventRoutes);
-app.use('/transaction', transactionRoutes);
-
+app.use('/api', apiRoutes);
 app.use((req, res, next) => {
   next(new NotFoundError());
 });

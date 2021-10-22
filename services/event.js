@@ -16,7 +16,10 @@ eventService.getAll = async () => {
 
 eventService.getEventById = async (id) => {
   try {
-    return await repository.event.findByPk(id);
+    return await repository.event.findByPk(id, {
+      include: [repository.location, repository.eventTicket],
+      attributes: ['id', 'name', 'start_date', 'end_date'],
+    });
   } catch (error) {
     throw new InternalServerError(error.message);
   }

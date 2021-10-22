@@ -15,7 +15,7 @@ eventController.getAll = async (req, res, next) => {
 eventController.getById = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const data = await services.location.getLocationById(id);
+    const data = await services.event.getEventById(id);
     res.json(successResponse('Event Data', { data: data }, 200));
   } catch (error) {
     next(error);

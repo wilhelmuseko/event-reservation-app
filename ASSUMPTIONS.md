@@ -1,21 +1,14 @@
-Assumptions:
+# Assumptions
 
+## Flow
 - Location must be created first.
 - User can create multiple tickets.
+----------
 
-Constraints
 
-Create event:
+## Constraints and validations
 
-1. start_date > now, required
-2. end_date > now, required
-3. start_date < end_date
-4. start_date and end_date must be correct time format (YYYY-MM-DD HH:MM:SS)
-5. name length between 1 - 50, required
-6. location must valid location, required
-7. description is not required
-
-Create location:
+### Create location
 
 1. building_name length between 1 - 50, required
 2. street_address length between 1 - 250, required
@@ -24,7 +17,16 @@ Create location:
 5. unit_no max length 20, not required
 6. postal_code max length 16, not required
 
-create ticket:
+### Create event
+1. start_date > now, required
+2. end_date > now, required
+3. start_date < end_date
+4. start_date and end_date must be correct time format (YYYY-MM-DD HH:MM:SS)
+5. name length between 1 - 50, required
+6. location must valid location, required
+7. description is not required
+
+### Create ticket
 
 1. event_id must be valid id, required
 2. type length between 1 - 16, required
@@ -32,8 +34,8 @@ create ticket:
 4. price >= 0
 5. type and event_id unique together
 
-create transaction:
-customer:
+### Create transaction
+#### Customer
 
 1. first_name length between 1 - 250, required
 2. last_name max length 250, not required
@@ -45,12 +47,9 @@ customer:
 8. unit_no max length 20, not required
 9. postal_code max length 16, not required
 
-transaction:
+#### Transaction
 1. If quota less than 1, cannot purchase
 2. ticket quantity > 0
 3. ticket type must be chosen
 4. event without ticket cannot be reserved
 5. If event end date passed, cannot be reserved
-
-- Create read me
-- Create technical spec
