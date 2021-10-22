@@ -1,7 +1,6 @@
 const services = require('../services/index');
 const { successResponse } = require('../response_api');
-const { validationResult } = require('express-validator');
-const { ValidationError } = require('../error_utils/custom_error');
+const checkValidationResult = require('./util');
 const locationController = {};
 
 locationController.getAll = async (req, res, next) => {
@@ -25,10 +24,7 @@ locationController.getById = async (req, res, next) => {
 
 locationController.save = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new ValidationError(errors.array()[0].msg);
-    }
+    checkValidationResult(req);
     const newLocation = await services.location.save(req.body);
     res
       .status(201)

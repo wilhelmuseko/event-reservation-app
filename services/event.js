@@ -7,6 +7,7 @@ eventService.getAll = async () => {
     return await repository.event.findAll({
       include: [repository.location, repository.eventTicket],
       attributes: ['id', 'name', 'start_date', 'end_date'],
+      order: [['start_date', 'DESC']],
     });
   } catch (error) {
     throw new InternalServerError(error.message);

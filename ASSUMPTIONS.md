@@ -46,9 +46,11 @@ customer:
 9. postal_code max length 16, not required
 
 transaction:
-
 1. If quota less than 1, cannot purchase
 2. ticket quantity > 0
 3. ticket type must be chosen
 4. event without ticket cannot be reserved
 5. If event end date passed, cannot be reserved
+
+- Create read me
+- Create technical spec

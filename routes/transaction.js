@@ -9,9 +9,8 @@ const {
 } = require('../common_utils/validator');
 const router = express.Router();
 const controller = require('../controller/index');
-const repository = require('../repository/index');
 const { body } = require('express-validator');
-const { Sequelize } = require('sequelize');
+const service = require('../services/index');
 
 router.post(
   '/create',
@@ -32,30 +31,25 @@ router.post(
   dateFormatValidation('customer.date_of_birth'),
   requiredValidation('event'),
   requiredValidation('event.id'),
-  idExistsValidation('event.id', repository.event),
+  idExistsValidation('event.id', service.event.getAll()),
   requiredValidation('event.tickets')
     .notEmpty()
     .withMessage('Tickets must not be empty.'),
   numberMinValueValidation('event.tickets.*.quantity', 1),
   body('event.id')
     .if(body('event.id').exists())
-    .custom((value, { req }) => {
-      return repository.eventTicket
-        .findOne({
-          where: {
-            event_id: value,
-          },
-        })
-        .then((record) => {
-          if (!record) {
-            return Promise.reject('Event chosen must have ticket first.');
-          }
-        });
+    .custom(async (value, { req }) => {
+      const eventTicket = await service.eventTicket.findOneWithCondition({
+        event_id: value,
+      });
+      if (!eventTicket) {
+        return Promise.reject('Event chosen must have ticket first.');
+      }
     }),
   body('event.id')
     .if(body('event.id').exists())
     .custom(async (value, { req }) => {
-      const event = await repository.event.findByPk(value);
+      const event = await service.event.getEventById(value);
       if (!event) return true;
       if (new Date(event.end_date) < new Date()) {
         return Promise.reject(
@@ -63,15 +57,23 @@ router.post(
         );
       }
     }),
+  body('event.tickets.*.id').custom(async (value, { req }) => {
+    const ticket = await service.eventTicket.getById(value);
+    const eventId = req.body.event.id;
+    if (ticket.event_id !== eventId) {
+      return Promise.reject(
+        'This ticket is not belong to the selected event. Please re-check the input.'
+      );
+    }
+    return true;
+  }),
   body('event.tickets').custom(async (value, { req }) => {
     for (var ticket of value) {
-      const eventTicketData = await repository.eventTicket.findByPk(ticket.id);
+      const eventTicketData = await service.eventTicket.getById(ticket.id);
       const total =
-        (await repository.ticketPurchaseDetail.sum('quantity', {
-          where: {
-            event_ticket_id: ticket.id,
-          },
-        })) || 0;
+        await service.transaction.getTotalQuantityPurchaseByEventTicketId(
+          ticket.id
+        );
 
       if (total + ticket.quantity > eventTicketData.quota) {
         return Promise.reject(

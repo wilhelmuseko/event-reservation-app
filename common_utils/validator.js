@@ -55,11 +55,12 @@ const minLengthValidation = (fieldName, min) =>
       `${snakeCaseToTitleCase(fieldName)} length must be minimum ${min}`
     );
 
-const idExistsValidation = (fieldName, model) =>
+const idExistsValidation = (fieldName, query) =>
   body(fieldName)
     .if(body(fieldName).exists())
     .custom((value, { req }) => {
-      return model.findByPk(value).then((record) => {
+      return query.then((data) => {
+        const record = data.find((o) => o.id === value);
         if (!record) {
           return Promise.reject(
             `${snakeCaseToTitleCase(

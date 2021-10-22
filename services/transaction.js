@@ -44,6 +44,7 @@ const getTicketPurchaseQuery = () => {
 transactionService.getAll = async () => {
   try {
     const query = getTicketPurchaseQuery();
+    query['order'] = [['date_of_purchase', 'DESC']];
     const data = await repository.ticketPurchase.findAll(query);
     return data;
   } catch (error) {
@@ -84,6 +85,19 @@ transactionService.save = async (body) => {
     };
     const data = await repository.ticketPurchase.findAll(query);
     return data;
+  } catch (error) {
+    throw new InternalServerError(error.message);
+  }
+};
+
+transactionService.getTotalQuantityPurchaseByEventTicketId = async (id) => {
+  try {
+    const data = await repository.ticketPurchaseDetail.sum('quantity', {
+      where: {
+        event_ticket_id: id,
+      },
+    });
+    return data || 0;
   } catch (error) {
     throw new InternalServerError(error.message);
   }
